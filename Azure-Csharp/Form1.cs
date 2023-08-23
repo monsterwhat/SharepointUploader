@@ -8,6 +8,7 @@ namespace Azure_Csharp
 {
     public partial class Form1 : System.Windows.Forms.Form
     {
+        string selectedFilePath;
         public Form1()
         {
             InitializeComponent();
@@ -29,19 +30,24 @@ namespace Azure_Csharp
             openFileDialog1.InitialDirectory = @"C:/";
             this.openFileDialog1.Title = "Seleccione un archivo";
             this.openFileDialog1.FileName = "*.*";
-            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                string selectedFilePath = openFileDialog1.FileName;
+                selectedFilePath = openFileDialog1.FileName;
                 ArchivoTxt.Text = selectedFilePath;
             }
         }
 
         public void subirArchivo()
         {
-            string siteUrl = "https://{your_tenant}.sharepoint.com/sites/{your_site_name}"; //Nombre del sitio de SharePoint
-            string libraryName = "Documentos"; // Nombre de la biblioteca en la que deseas subir el archivo
-            string fileName = "test.pdf"; // Nombre del archivo que deseas subir
-            string filePath = "C:\\Users\\USER\\Desktop"; // Ruta local del archivo
+            if (urlText.Text.Length < 1 || libreriaTxt.Text.Length < 1 || ArchivoTxt.Text.Length < 1 || selectedFilePath.Length < 1) {
+                MessageBox.Show("Complete todos los campos antes de continuar");
+                return;
+            }
+
+            string siteUrl = urlText.Text; //Nombre del sitio de SharePoint
+            string libraryName = libreriaTxt.Text; // Nombre de la biblioteca en la que deseas subir el archivo
+            string fileName = ArchivoTxt.Text; // Nombre del archivo que deseas subir
+            string filePath = selectedFilePath; // Ruta local del archivo
             string clientId = "your_app_client_id";// ID de cliente de la aplicación en Azure AD
             string clientSecret = "valor_secreto_del_app";// Secreto de cliente de la aplicación en Azure AD
 
